@@ -161,6 +161,27 @@ test('用量解析：没有 meters 时给出原因', () => {
     assert.equal(parsed.reason, 'no-meters');
 });
 
+test('用量解析（zen）：毫秒时间戳与 ISO 串都算重置倒计时', () => {
+    const ms = Date.now() + 3600 * 1000;
+    const windows = _internal.parseZenUsage({
+        usage: {
+            rolling: { percent: 25, resetsAt: ms },
+            weekly: { percent: 60, resetsAt: new Date(Date.now() + 2 * 3600 * 1000).toISOString() },
+            monthly: { percent: 80, resetsAt: ms }
+        }
+    }).windows;
+    assert.deepEqual(windows.map((window) => window.key), ['rolling', 'weekly', 'monthly']);
+    assert.equal(windows[0].remainingPercent, 75);
+    assert.equal(windows[1].remainingPercent, 40);
+    assert.ok(windows[0].resetInSeconds > 0 && windows[1].resetInSeconds > 0);
+});
+
+test('用量解析（zen）：没有 usage 时给出原因', () => {
+    const parsed = _internal.parseZenUsage({});
+    assert.equal(parsed.windows.length, 0);
+    assert.equal(parsed.reason, 'no-usage');
+});
+
 let failed = 0;
 for (const { name, fn } of cases) {
     try {
