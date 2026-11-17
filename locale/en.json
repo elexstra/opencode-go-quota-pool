@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "配额条",
+    "description": "Shows OpenCode Go rolling, weekly, and monthly quota bars under the composer, with the host half fetching usage and falling back silently when data is missing."
+  }
+}

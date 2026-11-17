@@ -1,0 +1,16 @@
+# 依赖与本地产物
+node_modules/
+*.tgz
+
+# 凭据与本地配置：永远不要提交
+*.credentials.yaml
+credentials*.json
+a.json
+b.json
+.env
+.env.*
+*.pem
+*.key
+
+# 日志
+*.log

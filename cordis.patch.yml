@@ -1,0 +1,17 @@
+# Bundle layer：一个包同时挂「宿主半」（轮转池 + 用量抓取）与「web 客户端半」（用量条）。
+# 安装：profile 的 package.json 加依赖 + dsh.profile.bundles 列出本包，重启宿主。
+#
+# 配置说明：
+#   activeRef   当前生效的凭据引用；opencode-go 的三条路由都应读它。
+#   slotRefs    两个订阅槽各存一个稳定引用；槽 a 首次启动自动从 activeRef 迁移。
+#   cooldownMs  失败槽冷却时长（毫秒），防 llm-retry 的 20 次重试在两把 key 间横跳。
+#   quotaDir    控制台用量凭据目录；每槽一个 <slot>.json（workspaceId + authCookie + sessionCookie）。
+- insert:
+    - id: opencode-go-quota-pool
+      name: opencode-go-quota-pool
+      config:
+        activeRef: OPENCODE_GO_API_KEY
+        slotRefs:
+          a: OPENCODE_GO_POOL_A
+          b: OPENCODE_GO_POOL_B
+        cooldownMs: 300000
