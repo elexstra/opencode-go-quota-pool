@@ -13,7 +13,7 @@ OpenCode Go 双订阅轮转池 + 用量条，合并为一个 DeepSeek Harness（
 
 - **两槽轮转**：槽 A / 槽 B 各存一个稳定凭据引用，生效引用由插件改写，切槽后下一个请求立即用新 key。
 - **只认 reached limit**：限流（429 RPM）、网络抖动、认证错误都不切——只有上游消息里出现 `reached limit` 才换槽，避免把可恢复的抖动当成额度耗尽。
-- **用量条联动**：web 客户端在输入框下方画四根条（滚动 / 每周 / 每月 / 近 30 天分模型），数据来自当前槽位账号的控制台凭据；切槽后换账号显示。
+- **用量条联动**：web 客户端在输入框下方画四根条（滚动 / 每周 / 每月 / 近 30 天分模型）。前三条来自当前槽位账号的控制台凭据，切槽后换账号显示；第四条读的是本机 DSH 自己的会话日志（`<DSH_HOME>/sessions/**/session.*.jsonl.zstd` 里 `assistant/message` 的 usage），不跟槽位走。
 - **热迁移**：首次启动把生效引用里的现有 key 迁进槽 A；回切时原槽不动，随时切得回来。
 - **本机管理面**：`/plugins/opencode-go-pool/status` 看状态与当前用量，`/switch`、`/set` 手动切换与写入 key。
 - **不自行重试**：只切凭据，重试交给 llm-retry（同一 step 内重新 `prepareCall`、重新 resolve 凭据）。

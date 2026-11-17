@@ -1,6 +1,6 @@
 {
   "name": "opencode-go-quota-pool",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "OpenCode Go 双订阅轮转池 + 用量条：两把 API Key 顺序耗尽，额度打满时切到另一把，用量条显示当前生效槽位的账号用量",
   "license": "MIT",
   "type": "module",
